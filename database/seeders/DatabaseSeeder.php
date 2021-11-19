@@ -23,9 +23,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-		$seed_num=10;
+		$seed_num=100;
 		
-		Category::factory()->count($seed_num)->create();
+		Category::factory()->count(10)->create();
 		Food::factory()->count($seed_num)->create(); 
 		Ingredient::factory()->count($seed_num)->create();
 		
@@ -46,9 +46,12 @@ class DatabaseSeeder extends Seeder
 			Trans_food::factory()->create(['food_id'=>$i,'language_id'=>'1']);
 			Trans_food::factory()->create(['food_id'=>$i,'language_id'=>'2']);
 			
-			Trans_category::factory()->create(['category_id'=>$i,'language_id'=>'1']);
-			Trans_category::factory()->create(['category_id'=>$i,'language_id'=>'2']);
 			
+			if($seed_num <=10){
+				Trans_category::factory()->create(['category_id'=>$i,'language_id'=>'1']);
+				Trans_category::factory()->create(['category_id'=>$i,'language_id'=>'2']);
+			}
+
 			Trans_tag::factory()->create(['tags_id'=>$i,'language_id'=>'1']);
 			Trans_tag::factory()->create(['tags_id'=>$i,'language_id'=>'2']);
 			

@@ -19,7 +19,7 @@ class IngredientFactory extends Factory
 		$this->faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($this->faker));
 		
         return [
-            'title' => $this->faker->unique()->meatName(),
+            'title' => $this->faker->meatName(),
 			'slug' => $this->faker->bothify('?????')
         ];
     }
