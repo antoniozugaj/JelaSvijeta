@@ -19,13 +19,13 @@ class FoodFactory extends Factory
 	 
     public function definition()
     {
-		$seed_num = 10;
+	    $categorySeedNumber = 10;   
 		
 		$this->faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($this->faker));
 		
         return [
             'title' => $this->faker->foodName(),
-			'category_id' => $this->faker->optional($weight = 0.8)->numberBetween(1,$seed_num),
+			'category_id' => $this->faker->optional($weight = 0.8)->numberBetween(1 ,$categorySeedNumber),
 			'status' => $this->faker->randomElement(['created', 'deleted']),
 			'description' => $this->faker->text()
 			

@@ -52,6 +52,10 @@ class ShowController extends Controller
 				return view('error', [ 'error' => 'Page atributes must be a number']);
 		
 
+
+		
+		return Food::only(['1','2']); //////////////////////////////////TEST
+
 		switch($with)
 		{
 			case "ingredients":				

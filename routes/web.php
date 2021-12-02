@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShowController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,4 @@ use App\Http\Controllers\ShowController;
 
 Route::get('/',[ShowController::class,'Form']);
 
-Route::get('/sve', [ShowController::class,'Show']);
+Route::get('/show', [TestController::class,'Show']);

@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Trans_ingredient extends Model
 {
     use HasFactory;
+
+    public function language()
+    {
+        return $this->belongsTo(Languaget::class);
+    }
+
+    public function ingredient()
+    {
+        return $this->belongsTo(Ingredient::class);
+    }
 }

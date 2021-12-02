@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Trans_tag extends Model
 {
     use HasFactory;
+
+    public function language()
+    {
+        return $this->belongsTo(Languaget::class);
+    }
+
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class);
+    }
+
 }

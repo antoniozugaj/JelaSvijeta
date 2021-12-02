@@ -25,7 +25,7 @@
 		<h1 style="text-align:center">Dishes of the world</h1>
 		
 		<div style="text-align:center">
-			<form action="/sve" method="get">
+			<form action="/api/show" method="get">
 				
 				<select id="category" name="category">
 					<option value="-"></option>
@@ -39,25 +39,15 @@
 				
 				
 				<input list="tags" name="tags">
-					<datalist id="tags">
-					</datalist> 
 				<label for="with">Tags</label> <br>
 				
-				<select id="with" name="with">
-					<option></option>
-					<option value="ingredients">ingredients</option>
-					<option value="categories">categories</option>
-					<option value="tags">tags</option>
-					<option value="ingredients,tags">ingredient,tags</option>
-					<option value="ingredients,categories">ingredient,categories</option>
-					<option value="ingredients,categories,tags">ingredient,categories,tags</option>
-				</select>
-				<label for="lang">Also display</label> <br>
+				<input list="with" name="with"> 
+				<label for="with">With</label> <br>
 								
 				<select id="lang" name="lang">
-				  <option value="-">English</option>
+				  <option value="eng">English</option>
 				  @foreach($language as $language)
-					<option value="{{$language->id}}">{{$language->name}}</option>
+					<option value="{{$language->lang}}">{{$language->name}}</option>
 				  @endforeach
 				</select>
 				<label for="lang">Language</label> <br>
@@ -65,14 +55,15 @@
 				
 				<input type="text" id="diff_time" name="diff_time">	
 				<label for="diff_time">Diff time</label> <br>
-		<!-- 
+		
 				<input type="text" id="per_page" name="per_page">	
 				<label for="per_page">Dishes per page</label> <br>
 				
 				<input type="text" id="page" name="page">	
 				<label for="page">Page number</label> <br><br><br>
-		-->
-				 <input type="submit"> 
+
+				
+				<input type="submit"> 
 			</form>
 		</div>
 		

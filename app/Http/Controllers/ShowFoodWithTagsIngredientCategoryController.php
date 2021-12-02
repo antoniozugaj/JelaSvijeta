@@ -37,7 +37,7 @@ class ShowFoodWithTagsIngredientCategoryController extends Controller
 						
 																												//eng,diff//
 						$allFood=Food::query()
-							->select('food.id','food.title','food.description')->get();																	
+							->select('food.id','foods.title','food.description')->get();																	
 						
 						return $this->CheckPaginate($this->GetString($allFood),$per_page,$page);
 						

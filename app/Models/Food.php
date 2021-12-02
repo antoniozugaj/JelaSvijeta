@@ -11,16 +11,22 @@ class Food extends Model
 	
 	public function ingredient()
     {
-        return $this->belongsTo(Ingredient::class);
+        return $this->belongsToMany(Ingredient::class);
     }
 	
 	public function tag()
     {
-        return $this->belongsTo(Tag::class);
+        return $this->belongsToMany(Tag::class);
     }
 	
 	 public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
+
+    public function trans_food()
+    {
+        return $this->hasOne(Trans_food::class);
+    }
+
 }
