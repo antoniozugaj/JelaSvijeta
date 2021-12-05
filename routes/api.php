@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShowController;
-use App\Http\Controllers\TestController;                                ////DELETE
 
 
 /*
@@ -16,7 +15,7 @@ use App\Http\Controllers\TestController;                                ////DELE
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/show', [TestController::class,'Show']);                    //SHANGE TO SHOWCONT
+Route::get('/show', [ShowController::class, 'show']);                    
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -28,8 +28,8 @@
 			<form action="/api/show" method="get">
 				
 				<select id="category" name="category">
-					<option value="-"></option>
-					<option value="">Dishes with no category</option>
+					<option value="!NULL"></option>
+					<option value="NULL">Dishes with no category</option>
 				  
 					@foreach($category as $category)
 						<option value="{{$category->id}}">{{$category->title}}</option>

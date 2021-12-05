@@ -15,6 +15,6 @@ use App\Http\Controllers\TestController;
 |
 */
 
-Route::get('/',[ShowController::class,'Form']);
+Route::get('/', [ShowController::class, 'form']);
 
-Route::get('/show', [TestController::class,'Show']);
+Route::get('/show', [TestController::class, 'Show']);

@@ -25,7 +25,7 @@ class FoodFactory extends Factory
 		
         return [
             'title' => $this->faker->foodName(),
-			'category_id' => $this->faker->optional($weight = 0.8)->numberBetween(1 ,$categorySeedNumber),
+			'category_id' => $this->faker->optional($weight = 0.8)->numberBetween(1, $categorySeedNumber),
 			'status' => $this->faker->randomElement(['created', 'deleted']),
 			'description' => $this->faker->text()
 			

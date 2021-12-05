@@ -20,7 +20,6 @@ class CreateFoodTable extends Migration
 			$table->string('status');
             $table->timestamps();
 			$table->unsignedBigInteger('category_id')->nullable();
-			
 			$table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
         });
     }
