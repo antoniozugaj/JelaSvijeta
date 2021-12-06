@@ -12,6 +12,10 @@ use App\Models\Language;
 
 class TestController extends Controller
 {
+	/*
+	Task done with Eloquent relationships
+	*/
+
 	public function show(Request $request)
 	{
 		//Save data from request													
@@ -33,6 +37,79 @@ class TestController extends Controller
 		//All dishes
         $query = Food::query();
         
+
+		//Filter dishes by tags
+        if ($validTags) {
+
+            $query->whereHas('tag', function ($var) use ($validTags) {
+				$var->whereIn('id', $validTags);
+			});
+        }
+
+		//Add "with" data to dishes
+		if (in_array('category', $validWith)) {
+			//Dish + category
+			if ($lang != 'eng') {
+				$query->with('category.transCategory');
+			} else {
+				$query->with('category');
+			}
+		}
+		
+		if (in_array('tag', $validWith)) {
+			//Dish + tag 
+			if ($lang != 'eng') {
+				$query->with('tag.transTag');
+			} else {
+				$query->with('tag');
+			}
+		}
+
+		if (in_array('ingredient', $validWith)) {
+			//Dish + ingredient
+			if ($lang != 'eng') {
+				$query->with('ingredient.transIngredient');
+			} else {
+				$query->with('ingredient');
+			}
+		}
+
+		if (in_array('category', $validWith) && in_array('ingredient', $validWith)) {
+			//Dish + category + ingredient
+			if ($lang != 'eng') {
+				$query->with('category.transCategory','ingredient.transIngredient');
+			} else {
+				$query->with('category','ingredient');
+			}
+		}
+
+		if (in_array('category', $validWith) && in_array('tag', $validWith)) {
+			//Dish + category + tags
+			if ($lang != 'eng') {
+				$query->with('category.transCategory','tag.transTag');
+			} else {
+				$query->with('category','tag');
+			}
+		}
+
+		if (in_array('tag', $validWith) && in_array('ingredient', $validWith)) {
+			//Dish + tags + ingredients
+			if ($lang != 'eng') {
+				$query->with('tag.transTag','ingredient.transIngredient');
+			} else {
+				$query->with('tag','ingredient');
+			}
+		}
+
+		if (in_array('category', $validWith) && in_array('ingredient', $validWith) && in_array('tag', $validWith)) {
+			//Dish + category + tags + ingredients 
+			if ($lang != 'eng') {
+				$query->with('category.transCategory','tag.transTag','ingredient.transIngredient');
+			} else {
+				$query->with('category','ingredient','tag');
+			}
+		}
+
 		//Filter dishes by diff_time (simplified version as per task instructions)
         if (!isset($diff_time) && !is_numeric($diff_time)) { 
             $query->where('status', 'created');
@@ -48,175 +125,16 @@ class TestController extends Controller
 			$query->where('category_id', null);
 		}
 
-		//Filter dishes by tags
-        if ($validTags) {
-
-            $query->join('food_tag', 'food.id', '=', 'food_tag.food_id')
-				->join('tags', 'tags.id', '=', 'food_tag.tag_id')
-				->whereIn('tags.id', $validTags);
-        }
 
 		//Filter dishes by language
-        if ($lang != 'eng') {
-
-            $query->join('trans_foods', 'food.id', '=', 'trans_foods.food_id')
-                ->join('languages', 'languages.id', '=', 'trans_foods.language_id')
-                ->where('lang', $lang)
-                ->select('food.id', 'trans_foods.title', 'trans_foods.description', 'food.status');
+		if ($lang != 'eng') {
+            $query->with('transFood');
         } else {
-			$query->select('food.id', 'food.title', 'food.description', 'food.status');
+			$query->select('id', 'title', 'description', 'status','category_id');
 		}
 
-        $query = $query->distinct()->get();
-
-		$categoryArray;
-		$tagArray;
-		$ingredientArray;
-		$dataArray=array();
-
-		//Add "with" data to dishes
-		foreach($query as $dish) {
-
-			if (in_array('category', $validWith)) {
-				//Get dish categoriey
-				$categoryArray = Category::join('food', 'food.category_id', '=', 'categories.id')
-					->where('food.id', $dish->id);
-				
-				//Select language for category
-				if ($lang != 'eng') {
-					$categoryArray->join('trans_categories', 'trans_categories.category_id', '=', 'caegories.id')
-						->join('language', 'language.id', '=', 'trans_categories.language_id')
-						->where('lang', $lang)
-						->select('categories.id', 'trans_categories.title', 'categories.slug');
-				} else {
-					$categoryArray->select('categories.id', 'categories.title', 'categories.slug');
-				}
-				$categoryArray=$categoryArray->get(); 
-
-				//Dish + category
-				$json =response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'category' => $categoryArray
-				]);
-			}
-			
-			if (in_array('tag', $validWith)) {
-				//Get dish tags 
-				$tagArray = Food::join('food_tag', 'food.id', '=', 'food_tag.food_id')
-					->join('tags', 'tags.id', '=', 'food_tag.tag_id')
-					->where('food.id', $dish->id);
-					
-				//Select language for tags
-				if ($lang != 'eng') {
-					$tagArray->join('trans_tag', 'trans_tag.tag_id', '=', 'tags.id')
-						->join('language', 'language.id', '=', 'trans_tags.language_id')
-						->where('lang', $lang)
-						->select('tags.id', 'trans_tags.title', 'tags.slug');
-				} else {
-					$tagArray->select('tags.id', 'tags.title', 'tags.slug');
-				}
-				$tagArray = $tagArray->get();
-
-				//Dish + tags
-				$json = response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'tags' => $tagArray
-				]);
-			}
-	
-			if (in_array('ingredient', $validWith)) {
-				//Get dish ingredients
-				$ingredientArray = Food::join('food_ingredient', 'food.id', '=', 'food_ingredient.food_id')
-					->join('ingredients', 'ingredients.id', '=', 'food_ingredient.ingredient_id')
-					->where('food.id', $dish->id);
-					
-				//Select ingredients language
-				if ($lang != 'eng') {
-					$ingredientArray->join('trans_ingredients', 'trans_ingredients.ingredient_id', '=', 'ingredients.id')
-						->join('language', 'language.id', '=', 'trans_ingredients.language_id')
-						->where('lang', $lang)
-						->select('ingredients.id', 'trans_ingredients.title', 'ingredients.slug');
-				} else {
-					$ingredientArray->select('ingredients.id', 'ingredients.title', 'ingredients.slug');
-				}
-				$ingredientArray = $ingredientArray->get();
-
-				//Dish + ingredients
-				$json =response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'ingredients' => $ingredientArray
-				]);
-			}
-
-			if (in_array('category', $validWith) && in_array('ingredient', $validWith)) {
-				//Dish + category + ingredient
-				$json = response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'category' => $categoryArray,
-					'ingredients' => $ingredientArray
-				]);
-			}
-
-			if (in_array('category', $validWith) && in_array('tag', $validWith)) {
-				//Dish + category + tags
-				$json = response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'category' => $categoryArray,
-					'tags' => $tagArray
-				]);
-			}
-
-			if (in_array('tag', $validWith) && in_array('ingredient', $validWith)) {
-				//Dish + tags + ingredients
-				$json = response()->json([
-					'id'=> $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'tags' => $tagArray,
-					'ingredients' => $ingredientArray
-				]);
-			}
-
-			if (in_array('category', $validWith) && in_array('ingredient', $validWith) && in_array('tag', $validWith)) {
-				//Dish + category + tags + ingredients 
-				$json = response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-					'category' => $categoryArray,
-					'tags' => $tagArray,
-					'ingredients' => $ingredientArray
-				]);
-			}
-
-			if (!in_array('category', $validWith) && !in_array('ingredient', $validWith) && !in_array('tag', $validWith)) {
-				//Only dish
-				$json = response()->json([
-					'id' => $dish->id,
-					'title' => $dish->title,
-					'description' => $dish->description,
-					'status' => $dish->status,
-				]);
-			}
-			array_push($dataArray, $json);
-		}
+		//Fetch all needed data
+		$query = $query->distinct()->get();
 
 		//Data that will fill json response 
 		$data=array();
@@ -227,7 +145,7 @@ class TestController extends Controller
 		}		
 		
 		//Calculate total pages
-		$totalPages = ceil((float) count($dataArray) / $per_page);
+		$totalPages = ceil((float) count($query) / $per_page);
 		
 		//Check if page is set and if not, set to first or to the last page
 		if (!isset($page) or !is_numeric($page) or (int) $page < 1) {
@@ -237,10 +155,11 @@ class TestController extends Controller
 			$page = $totalPages;
 		}
 
-		//Select dishes for the corresponding page
-		for ($i =( $page - 1) * $per_page; $i < count($dataArray) && $i < $page * $per_page; $i++) {				
-
-			array_push($data, $dataArray[$i]->original);
+		if(count($query)){
+			//Select dishes for the corresponding page
+			for ($i =( $page - 1) * $per_page; $i < count($query) && $i < $page * $per_page; $i++) {				
+				array_push($data, $query[$i]);
+			}
 		}
 
 		//Correct url with page
@@ -265,7 +184,7 @@ class TestController extends Controller
 		//Fill and return Json full response
 		return response()->json(['meta'=>[
 				'CurrentPage' => (int) $page,
-				'totalItems' => count($dataArray),
+				'totalItems' => count($query),
 				'itmesPerPage' => (int) $per_page,
 				'totalPages' => $totalPages],
 			'data' => $data,
@@ -274,6 +193,7 @@ class TestController extends Controller
 				'next' => $next,
 				'self' => $self]
 		]);
+	
 	}
 
     public function getValidTags($allTags)
