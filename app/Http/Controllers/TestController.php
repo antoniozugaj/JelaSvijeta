@@ -115,6 +115,8 @@ class TestController extends Controller
             $query->where('status', 'created');
         } elseif ((int)$diff_time < 0) {
 				$query->where('status', 'created');	
+		} else {
+			$query->where('created_at', '>',$diff_time,'or','updated_at','>',$diff_time);
 		}
 
 		//Filter dishes by category
