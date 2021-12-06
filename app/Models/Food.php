@@ -24,9 +24,9 @@ class Food extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function trans_food()
+    public function transFood()
     {
-        return $this->hasOne(Trans_food::class);
+        return $this->hasOne(TransFood::class);
     }
 
 }

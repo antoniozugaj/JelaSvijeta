@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Trans_category;
+use App\Models\TransCategory;
 
-class Trans_categoryFactory extends Factory
+class TransCategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -13,7 +13,7 @@ class Trans_categoryFactory extends Factory
      * @return array
      */
 	
-	protected $model = Trans_category::class;
+	protected $model = TransCategory::class;
 	 
     public function definition()
     {

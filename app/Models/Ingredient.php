@@ -14,8 +14,8 @@ class Ingredient extends Model
 		return $this->belongsToMany(Food::class);
 	}
 
-	public function trans_ingredient()
+	public function transIngredient()
     {
-        return $this->hasOne(Trans_ingredient::class);
+        return $this->hasOne(TransIngredient::class);
     }
 }

@@ -10,7 +10,7 @@ use App\Models\Tag;
 use App\Models\Language;
 
 
-class ShowController extends Controller
+class TestController extends Controller
 {
 	public function show(Request $request)
 	{
@@ -29,7 +29,7 @@ class ShowController extends Controller
         $validTags = $this->getValidTags($allTags);
 		//Get valid "with" parameters
         $validWith = $this->getValidWith($with);
-
+		
 		//All dishes
         $query = Food::query();
         
@@ -59,10 +59,10 @@ class ShowController extends Controller
 		//Filter dishes by language
         if ($lang != 'eng') {
 
-            $query->join('trans_food', 'food.id', '=', 'trans_food.food_id')
-                ->join('languages', 'languages.id', '=', 'trans_food.language_id')
+            $query->join('trans_foods', 'food.id', '=', 'trans_foods.food_id')
+                ->join('languages', 'languages.id', '=', 'trans_foods.language_id')
                 ->where('lang', $lang)
-                ->select('food.id', 'trans_food.title', 'trans_food.description', 'food.status');
+                ->select('food.id', 'trans_foods.title', 'trans_foods.description', 'food.status');
         } else {
 			$query->select('food.id', 'food.title', 'food.description', 'food.status');
 		}
@@ -84,8 +84,8 @@ class ShowController extends Controller
 				
 				//Select language for category
 				if ($lang != 'eng') {
-					$categoryArray->join('trans_categories', 'trans_categories.category_id', '=', 'categories.id')
-						->join('languages', 'languages.id', '=', 'trans_categories.language_id')
+					$categoryArray->join('trans_categories', 'trans_categories.category_id', '=', 'caegories.id')
+						->join('language', 'language.id', '=', 'trans_categories.language_id')
 						->where('lang', $lang)
 						->select('categories.id', 'trans_categories.title', 'categories.slug');
 				} else {
@@ -111,8 +111,8 @@ class ShowController extends Controller
 					
 				//Select language for tags
 				if ($lang != 'eng') {
-					$tagArray->join('trans_tags', 'trans_tags.tag_id', '=', 'tags.id')
-						->join('languages', 'languages.id', '=', 'trans_tags.language_id')
+					$tagArray->join('trans_tag', 'trans_tag.tag_id', '=', 'tags.id')
+						->join('language', 'language.id', '=', 'trans_tags.language_id')
 						->where('lang', $lang)
 						->select('tags.id', 'trans_tags.title', 'tags.slug');
 				} else {
@@ -139,7 +139,7 @@ class ShowController extends Controller
 				//Select ingredients language
 				if ($lang != 'eng') {
 					$ingredientArray->join('trans_ingredients', 'trans_ingredients.ingredient_id', '=', 'ingredients.id')
-						->join('languages', 'languages.id', '=', 'trans_ingredients.language_id')
+						->join('language', 'language.id', '=', 'trans_ingredients.language_id')
 						->where('lang', $lang)
 						->select('ingredients.id', 'trans_ingredients.title', 'ingredients.slug');
 				} else {
@@ -240,9 +240,7 @@ class ShowController extends Controller
 		//Select dishes for the corresponding page
 		for ($i =( $page - 1) * $per_page; $i < count($dataArray) && $i < $page * $per_page; $i++) {				
 
-			if($dataArray){
-				array_push($data, $dataArray[$i]->original);
-			}
+			array_push($data, $dataArray[$i]->original);
 		}
 
 		//Correct url with page
@@ -320,4 +318,5 @@ class ShowController extends Controller
 		
 		return view('index', ['category' => $data_category, 'language' => $data_language]);
 	}
+
 }

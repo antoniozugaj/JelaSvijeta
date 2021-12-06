@@ -15,7 +15,7 @@ class Category extends Model
         return $this->hasOne(Food::class);
     }
 
-    public function trans_category()
+    public function transCategory()
     {
         return $this->hasOne(Trans_category::class);
     }

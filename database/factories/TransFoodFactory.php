@@ -3,23 +3,29 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Trans_ingredient;
+use App\Models\TransFood;
 
-class Trans_ingredientFactory extends Factory
+class TransFoodFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array
      */
+	
+	protected $model = TransFood::class;		
+	
     public function definition()
     {
+		
 		
 		$faker = \Faker\Factory::create();
 		$faker->addProvider(new \FakerRestaurant\Provider\de_DE\Restaurant($faker));
 		
         return [
-            'title' => $faker->dairyName()
+			'title' => $faker->foodName(),
+			'description' => $faker->text(),
         ];
+		
     }
 }

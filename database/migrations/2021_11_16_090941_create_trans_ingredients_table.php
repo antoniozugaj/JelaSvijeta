@@ -33,6 +33,6 @@ class CreateTransIngredientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trans_ingredients');
+        Schema::dropIfExists('transIngredients');
     }
 }

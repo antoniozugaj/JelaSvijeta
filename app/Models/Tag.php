@@ -14,8 +14,8 @@ class Tag extends Model
 		return $this->belongsToMany(Food::class);
 	}
 
-	public function trans_tag()
+	public function transTag()
     {
-        return $this->hasOne(Trans_tag::class);
+        return $this->hasOne(TransTag::class);
     }
 }

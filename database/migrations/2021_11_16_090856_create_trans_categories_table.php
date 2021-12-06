@@ -33,6 +33,6 @@ class CreateTransCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trans_categories');
+        Schema::dropIfExists('transCategories');
     }
 }

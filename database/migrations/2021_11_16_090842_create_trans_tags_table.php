@@ -18,10 +18,10 @@ class CreateTransTagsTable extends Migration
 			$table->string('title');
             $table->timestamps();
 			
-			$table->unsignedBigInteger('tags_id');
+			$table->unsignedBigInteger('tag_id');
 			$table->unsignedBigInteger('language_id');
 			
-			$table->foreign('tags_id')->references('id')->on('tags')->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('tag_id')->references('id')->on('tags')->onUpdate('cascade')->onDelete('cascade');
 			$table->foreign('language_id')->references('id')->on('languages')->onUpdate('cascade')->onDelete('cascade');
         });
     }
@@ -33,6 +33,6 @@ class CreateTransTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trans_tags');
+        Schema::dropIfExists('transTags');
     }
 }

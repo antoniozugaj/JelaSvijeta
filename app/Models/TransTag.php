@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Trans_ingredient extends Model
+class TransTag extends Model
 {
     use HasFactory;
 
@@ -14,8 +14,9 @@ class Trans_ingredient extends Model
         return $this->belongsTo(Languaget::class);
     }
 
-    public function ingredient()
+    public function tag()
     {
-        return $this->belongsTo(Ingredient::class);
+        return $this->belongsTo(Tag::class);
     }
+
 }

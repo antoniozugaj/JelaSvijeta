@@ -13,7 +13,7 @@ class CreateTransFoodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('trans_foods', function (Blueprint $table) {
+        Schema::create('trans_food', function (Blueprint $table) {
             $table->id();
 			$table->string('title');
 			$table->string('description');
@@ -34,6 +34,6 @@ class CreateTransFoodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trans_foods');
+        Schema::dropIfExists('transFoods');
     }
 }
