@@ -32,12 +32,14 @@ class ShowController extends Controller
 
 		//All dishes
         $query = Food::query();
-        
+
 		//Filter dishes by diff_time (simplified version as per task instructions)
         if (!isset($diff_time) && !is_numeric($diff_time)) { 
             $query->where('status', 'created');
         } elseif ((int)$diff_time < 0) {
 				$query->where('status', 'created');	
+		} else {
+			$query->where('created_at', '>',$diff_time,'or','updated_at','>',$diff_time);
 		}
 
 		//Filter dishes by category
